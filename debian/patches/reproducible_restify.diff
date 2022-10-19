@@ -1,0 +1,23 @@
+From: Chris Lamb <lamby@debian.org>
+Date: Thu, 21 Oct 2021 10:41:41 +0100
+Subject: Make util.typing.restify sanitise unreproducible output (eg. memory
+ addresses)
+
+(cherry picked from commit ef7dfcd5a3d4099459545473b7b761c17b626384)
+---
+ sphinx/util/typing.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sphinx/util/typing.py b/sphinx/util/typing.py
+index 8912de8..c74fa70 100644
+--- a/sphinx/util/typing.py
++++ b/sphinx/util/typing.py
+@@ -142,7 +142,7 @@ def restify(cls: Optional[Type]) -> str:
+             else:
+                 return _restify_py36(cls)
+     except (AttributeError, TypeError):
+-        return repr(cls)
++        return inspect.object_description(cls)
+ 
+ 
+ def _restify_py37(cls: Optional[Type]) -> str:
