@@ -7,6 +7,7 @@ Depends: dvipng,
          python3-all,
          python3-html5lib,
          python3-pytest,
+         python3-setuptools,
          python3-sphinx,
          python3-sphinxcontrib.websupport,
          python3-sqlalchemy (>= 0.9),
@@ -20,5 +21,6 @@ Depends: dvipng,
          texlive-xetex
 
 Tests: sphinx-doc
-Depends: gir1.2-webkit2-4.0 (>= 2.10), python3-gi, sphinx-doc, xauth, xvfb
+Depends: python3-pyqt6.qtwebengine, sphinx-doc, xauth, xvfb
 Restrictions: allow-stderr
+Architecture: amd64 i386

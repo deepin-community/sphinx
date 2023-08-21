@@ -8,10 +8,10 @@ Forwarded: not-needed
  1 file changed, 1 insertion(+)
 
 diff --git a/tests/test_theming.py b/tests/test_theming.py
-index c90e1e9..0a91843 100644
+index 21382d8..2a3b027 100644
 --- a/tests/test_theming.py
 +++ b/tests/test_theming.py
-@@ -65,6 +65,7 @@ def test_theme_api(app, status, warning):
+@@ -57,6 +57,7 @@ def test_theme_api(app, status, warning):
      assert not os.path.exists(themedir)
  
  

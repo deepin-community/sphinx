@@ -118,6 +118,7 @@ use warnings;
 use Digest::MD5;
 use File::Find;
 use Debian::Debhelper::Dh_Lib;
+use JSON;
 
 my %packaged_js = ();
 my @cruft_js = qw(websupport.js);
@@ -240,8 +241,8 @@ sub sanity_check($$)
         open(F, '<', $indexfn) or error("cannot open $indexfn");
         $index = <F>;
         close(F);
-        $index =~ m{^Search[.]setIndex[(].*?filenames:\["(.*?)"\].*[)]$} or error("$indexfn doesn't look like a Sphinx search index");
-        $index = $1;
+        $index =~ m{^Search[.]setIndex[(](.*)[)]$} or error("$indexfn doesn't look like a Sphinx search index");
+        $index = decode_json($1);
         $searchfn = "$path/search.html";
     }
     open(F, '<', $searchfn) or error("cannot open $searchfn");
@@ -270,7 +271,7 @@ sub sanity_check($$)
         }
     }
     defined $documentation_options or error("DOCUMENTATION_OPTIONS not found");
-    my $loads_searchindex = $search =~ m{<script(?: type="text/javascript")? src="[^"]?searchindex.js\s?"(?: defer)?>};
+    my $loads_searchindex = $search =~ m{<script(?: type="text/javascript")? src="[^"]*searchindex.js\s?"(?: defer)?>};
     unless ($loads_searchindex)
     {
         # old style, used before Sphinx 2.0
@@ -300,7 +301,8 @@ sub sanity_check($$)
     }
     unless ($singlehtml_file)
     {
-        for my $page (split(/","/, $index))
+        my $pages = $index->{"filenames"};
+        for my $page (@$pages)
         {
             # Append sourcelink_suffix if the page name does not already end with it.
             (my $sourcepage = $page) =~ s/(?<!$sourcelink_suffix)$/$sourcelink_suffix/;
@@ -480,10 +482,6 @@ sub list_built_using($)
     if (-d "$path/_static" and -f "$path/_static/alabaster.css")
     {
         my $alabaster_version = get_installed_package_version("python3-alabaster");
-        unless ($alabaster_version)
-        {
-            $alabaster_version = get_installed_package_version("python-alabaster");
-        }
         if ($alabaster_version)
         {
             push @built_using, "alabaster (= $alabaster_version)";

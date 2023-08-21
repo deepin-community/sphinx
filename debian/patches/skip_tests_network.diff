@@ -10,10 +10,10 @@ Forwarded: not-needed
  3 files changed, 5 insertions(+)
 
 diff --git a/tests/test_build_latex.py b/tests/test_build_latex.py
-index e0cfce9..a5f8004 100644
+index 004fc02..374e5ee 100644
 --- a/tests/test_build_latex.py
 +++ b/tests/test_build_latex.py
-@@ -1361,6 +1361,7 @@ def test_latex_raw_directive(app, status, warning):
+@@ -1384,6 +1384,7 @@ def test_latex_raw_directive(app, status, warning):
      assert 'LaTeX: abc def ghi' in result
  
  
@@ -22,10 +22,10 @@ index e0cfce9..a5f8004 100644
  def test_latex_images(app, status, warning):
      app.builder.build_all()
 diff --git a/tests/test_build_linkcheck.py b/tests/test_build_linkcheck.py
-index 2c6244b..737f668 100644
+index 631c7fa..5df6b87 100644
 --- a/tests/test_build_linkcheck.py
 +++ b/tests/test_build_linkcheck.py
-@@ -31,6 +31,7 @@ from .utils import CERT_FILE, http_server, https_server
+@@ -23,6 +23,7 @@ from .utils import CERT_FILE, http_server, https_server
  ts_re = re.compile(r".*\[(?P<ts>.*)\].*")
  
  
@@ -33,16 +33,16 @@ index 2c6244b..737f668 100644
  @pytest.mark.sphinx('linkcheck', testroot='linkcheck', freshenv=True)
  def test_defaults(app):
      app.build()
-@@ -52,6 +53,7 @@ def test_defaults(app):
-     assert len(content.splitlines()) == 6
+@@ -44,6 +45,7 @@ def test_defaults(app):
+     assert len(content.splitlines()) == 7
  
  
 +@pytest.mark.skip('Requires internet access')
  @pytest.mark.sphinx('linkcheck', testroot='linkcheck', freshenv=True)
  def test_defaults_json(app):
      app.build()
-@@ -104,6 +106,7 @@ def test_defaults_json(app):
-         rowsby["https://www.google.com/image.png"]["info"]
+@@ -105,6 +107,7 @@ def test_defaults_json(app):
+     }
  
  
 +@pytest.mark.skip('Requires internet access')
@@ -50,10 +50,10 @@ index 2c6244b..737f668 100644
      'linkcheck', testroot='linkcheck', freshenv=True,
      confoverrides={'linkcheck_anchors_ignore': ["^!", "^top$"],
 diff --git a/tests/test_setup_command.py b/tests/test_setup_command.py
-index 0561b2f..9382194 100644
+index ef36467..6b36ac9 100644
 --- a/tests/test_setup_command.py
 +++ b/tests/test_setup_command.py
-@@ -110,6 +110,7 @@ def test_build_sphinx_with_nonascii_path(setup_command):
+@@ -99,6 +99,7 @@ def test_build_sphinx_with_nonascii_path(setup_command):
      assert proc.returncode == 0
  
  

@@ -5,27 +5,30 @@ import sys
 
 import jstest
 
+from PyQt6.QtWidgets import QApplication
+
 class t1:
     search_term = 'example'
-    n_results = 71
-    n_links = 71
-    n_highlights = 66
+    n_results = 83
+    n_links = 83
+    n_highlights = 98
 
 class t2:
     search_term = 'examples'
-    n_results = 67
-    n_links = 67
-    n_highlights = 11
+    n_results = 74
+    n_links = 74
+    n_highlights = 17
 
 class t3:
     search_term = 'graph'
-    n_results = 31
-    n_links = 31
-    n_highlights = 4
+    n_results = 33
+    n_links = 33
+    n_highlights = 125
 
 if __name__ == '__main__':
     if not os.getenv('DISPLAY'):
         raise RuntimeError('These tests require access to an X server')
+    app = QApplication(sys.argv)
     [build_directory] = sys.argv[1:]
     build_directory = os.path.abspath(build_directory)
     n_failures = 0

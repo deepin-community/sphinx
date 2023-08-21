@@ -1,0 +1,35 @@
+From: Dmitry Shachnev <mitya57@debian.org>
+Date: Sat, 11 Dec 2021 19:19:27 +0300
+Subject: Make searchtools.js support old searchindex.js files
+
+Sphinx 4.3 has changed format of searchindex.js files, but in Debian
+there are lots of packages built with older Sphinx, and we want to
+keep them working for some time.
+
+Forwarded: not-needed
+---
+ sphinx/themes/basic/static/searchtools.js | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/sphinx/themes/basic/static/searchtools.js b/sphinx/themes/basic/static/searchtools.js
+index e89e34d..8279279 100644
+--- a/sphinx/themes/basic/static/searchtools.js
++++ b/sphinx/themes/basic/static/searchtools.js
+@@ -426,11 +426,14 @@ const Search = {
+         filenames[match[0]],
+       ]);
+     };
+-    Object.keys(objects).forEach((prefix) =>
++    Object.keys(objects).forEach((prefix) => {
++      if (!(objects[prefix] instanceof Array)) {
++        objects[prefix] = Object.entries(objects[prefix]).map(([name, match]) => [...match, name]);
++      }
+       objects[prefix].forEach((array) =>
+         objectSearchCallback(prefix, array)
+-      )
+-    );
++      );
++    });
+     return results;
+   },
+ 
