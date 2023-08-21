@@ -5,21 +5,47 @@ Subject: Use local intersphinx inventory
 To prevent Sphinx from downloading https://docs.python.org/3/objects.inv
 during build.
 ---
- doc/conf.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ doc/conf.py                | 5 ++---
+ doc/tutorial/deploying.rst | 9 ++++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/doc/conf.py b/doc/conf.py
-index 712cf63..c6451d6 100644
+index d24ef11..74be5b5 100644
 --- a/doc/conf.py
 +++ b/doc/conf.py
-@@ -107,8 +107,8 @@ texinfo_documents = [
+@@ -118,9 +118,8 @@ texinfo_documents = [
  ]
  
  intersphinx_mapping = {
 -    'python': ('https://docs.python.org/3/', None),
--    'requests': ('https://requests.readthedocs.io/en/master', None),
+-    'requests': ('https://requests.readthedocs.io/en/latest/', None),
+-    'readthedocs': ('https://docs.readthedocs.io/en/stable', None),
 +    'python': ('/usr/share/doc/python3-doc/html', None),
 +    'requests': ('/usr/share/doc/python-requests-doc/html', None),
  }
  
  # Sphinx document translation with sphinx gettext feature uses these settings:
+diff --git a/doc/tutorial/deploying.rst b/doc/tutorial/deploying.rst
+index 76b68c3..619b502 100644
+--- a/doc/tutorial/deploying.rst
++++ b/doc/tutorial/deploying.rst
+@@ -160,13 +160,16 @@ Read the Docs
+ ~~~~~~~~~~~~~
+ 
+ `Read the Docs`_ offers integration with both GitHub and GitLab. The quickest
+-way of getting started is to follow :doc:`the RTD
+-tutorial <readthedocs:tutorial/index>`, which is loosely based on this one.
++way of getting started is to follow `the RTD tutorial`_, which is loosely
++based on this one.
+ You can publish your sources on GitHub as explained :ref:`in the previous
+ section <publishing-sources>`, then skip directly to
+-:ref:`readthedocs:tutorial/index:Sign up for Read the Docs`.
++`Sign up for Read the Docs`_.
+ If you choose GitLab instead, the process is similar.
+ 
++.. _the RTD tutorial: https://docs.readthedocs.io/en/stable/tutorial/index.html
++.. _Sign up for Read the Docs: https://docs.readthedocs.io/en/stable/tutorial/index.html#sign-up-for-read-the-docs
++
+ GitHub Pages
+ ~~~~~~~~~~~~
+ 

@@ -1,2 +1,0 @@
-# Sphinx needs only pkg_resources, not the whole setuptools
-setuptools python3-pkg-resources

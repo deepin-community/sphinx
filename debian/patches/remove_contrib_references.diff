@@ -67,10 +67,10 @@ index 4d53152..4f7bdb6 100644
  
        Moved to sphinxcontrib.devhelp from sphinx.builders package.
 diff --git a/sphinx/application.py b/sphinx/application.py
-index b55eb76..399ce14 100644
+index 10c03a2..c83fcc2 100644
 --- a/sphinx/application.py
 +++ b/sphinx/application.py
-@@ -107,12 +107,6 @@ builtin_extensions = (
+@@ -99,12 +99,6 @@ builtin_extensions = (
      'sphinx.environment.collectors.metadata',
      'sphinx.environment.collectors.title',
      'sphinx.environment.collectors.toctree',
@@ -84,11 +84,11 @@ index b55eb76..399ce14 100644
      # but it is loaded automatically to use it as default theme.
      'alabaster',
 diff --git a/sphinx/builders/html/__init__.py b/sphinx/builders/html/__init__.py
-index 6e73253..b461a25 100644
+index 4fe40eb..861232e 100644
 --- a/sphinx/builders/html/__init__.py
 +++ b/sphinx/builders/html/__init__.py
-@@ -1299,8 +1299,6 @@ def migrate_html_add_permalinks(app: Sphinx, config: Config) -> None:
-     )
+@@ -1350,8 +1350,6 @@ def deprecate_html_4(_app: Sphinx, config: Config) -> None:
+ 
  
  # for compatibility
 -import sphinxcontrib.serializinghtml  # NOQA

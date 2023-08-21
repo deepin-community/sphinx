@@ -2,7 +2,7 @@
 # encoding=UTF-8
 
 # Copyright © 2011 Jakub Wilk <jwilk@debian.org>
-#           © 2013-2017 Dmitry Shachnev <mitya57@debian.org>
+#           © 2013-2022 Dmitry Shachnev <mitya57@debian.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -27,68 +27,61 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import urllib.parse
-import urllib.request
-import re
 import unittest
-import gi
 
-gi.require_version('Gtk', '3.0')
-gi.require_version('WebKit2', '4.0')
-from gi.repository import GLib, Gtk, WebKit2
+from PyQt6.QtCore import QTimer, QUrl, QUrlQuery
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWebEngineCore import QWebEnginePage
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
-default_time_limit = 40.0
+default_time_limit = 40_000  # msecs
+timer_step = 1_000  # msecs
 
 # HTTP browser
 # ============
 
-class Timeout(Exception):
-    pass
+class Page(QWebEnginePage):
+    def javaScriptConsoleMessage(self, level, message, lineNumber, sourceId):
+        print(f"[{level}] {sourceId}:{lineNumber}: {message}")
 
-class Browser(object):
 
-    def __init__(self, options):
-        settings = WebKit2.Settings()
-        settings.set_property('allow-file-access-from-file-urls', True)
-        settings.set_property('enable-write-console-messages-to-stdout', True)
-        self._time_limit = 0
-        self._view = WebKit2.WebView.new_with_settings(settings)
-        self._view.connect('notify::title', self._on_title_changed)
-        self._result = None
-        self._id = 0
+class View(QWebEngineView):
+    def __init__(self):
+        super().__init__()
+        self.result = None
+        self._page = Page(parent=self)
+        self._page.loadFinished.connect(self.onLoadFinished)
+        self.setPage(self._page)
+        self._timer = None
+        self._time_limit = default_time_limit
 
-    def _on_title_changed(self, webview, user_data):
-        contents = webview.get_property('title')
-        webview.run_javascript('document.title = ""')
-        found = re.match(r"(?P<n_results>\d+) (?P<n_links>\d+) (?P<n_highlights>\d+)", contents)
-        if found:
-            self._result = found.groupdict()
-            Gtk.main_quit()
-            GLib.source_remove(self._id)
-            self._id = 0
+    def setResult(self, result):
+        self.result = result
 
-    def _quit(self):
-        self._view.run_javascript(
-            "var n_results = $('#search-results > p:first').text().match(/found (\d+) page/)[1];\n"
-            "var n_links = $('#search-results a').length;\n"
-            "var n_highlights = $('#search-results .highlighted').length;\n"
-            "document.title = `${n_results} ${n_links} ${n_highlights}`;")
-        if self._time_limit < 0:
-            self._result = None
-            Gtk.main_quit()
-            return GLib.SOURCE_REMOVE
+    def onLoadFinished(self):
+        self._timer = QTimer(parent=self)
+        self._timer.timeout.connect(self.runJavaScript)
+        self._timer.start(timer_step)
 
-        self._time_limit -= 1
-        return GLib.SOURCE_CONTINUE
+    def runJavaScript(self):
+        if self._time_limit <= 0:
+            raise TimeoutError
+        script = """
+        result = {
+            n_results: $('#search-results > p:first').text().match(/found (\d+) page/)[1],
+            n_links: $('#search-results a').length,
+            n_highlights: $('#search-results .highlighted').length,
+        };
+        result
+        """
+        self._page.runJavaScript(script, self.setResult)
+        self._time_limit -= timer_step
 
-    def wget(self, url, time_limit=default_time_limit):
-        self._view.load_uri(url)
-        self._time_limit = time_limit
-        self._id = GLib.timeout_add_seconds(1, self._quit)
-        Gtk.main()
-        if self._result is None:
-            raise Timeout
-        return self._result
+    def waitForResult(self):
+        app = QApplication.instance()
+        while self.result is None:
+            app.processEvents()
+        self._timer.stop()
 
 
 # Actual tests
@@ -119,25 +112,14 @@ def test_html(result, options):
     return unittest.TextTestRunner(verbosity=2).run(suite)
 
 def test_directory(directory, options, time_limit=default_time_limit):
-    url = urllib.parse.urljoin('file:', urllib.request.pathname2url(directory))
-    url = urllib.parse.urljoin(url, 'html/search.html?q=' + urllib.parse.quote_plus(options.search_term))
-    browser = Browser(options)
-    result = browser.wget(url, time_limit)
-    return test_html(result, options)
-
-def main():
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--time-limit', type=float, default=default_time_limit)
-    parser.add_argument('directory', metavar='DIRECTORY')
-    parser.add_argument('search_term', metavar='SEARCH-TERM')
-    parser.add_argument('--n-results', type=int)
-    parser.add_argument('--n-links', type=int)
-    parser.add_argument('--n-highlights', type=int)
-    options = parser.parse_args()
-    test_directory(options.directory, options=options, time_limit=options.time_limit)
-
-if __name__ == '__main__':
-    main()
+    url = QUrl.fromLocalFile(f'{directory}/search.html')
+    query = QUrlQuery()
+    query.addQueryItem('q', options.search_term)
+    url.setQuery(query)
+    view = View()
+    view.load(url)
+    view.show()
+    view.waitForResult()
+    return test_html(view.result, options)
 
 # vim:ts=4 sw=4 et

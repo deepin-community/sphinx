@@ -1,0 +1,111 @@
+From: Adam Turner <9087854+aa-turner@users.noreply.github.com>
+Date: Sun, 1 Jan 2023 19:17:03 +0000
+Subject: Fix tests for Pygments 2.14
+
+Pygments 2.14 was released on 01/01/2023 [0]
+
+[0]: https://pygments.org/docs/changelog/#version-2-14-0
+
+(cherry picked from commit 965768bfda2a00ba6466cdb12a7a46efdce47023)
+---
+ pyproject.toml             |  2 +-
+ tests/test_ext_viewcode.py | 27 +++++++++++++++++++--------
+ tests/test_intl.py         | 11 +++++++++--
+ 3 files changed, 29 insertions(+), 11 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 7532268..06e5e45 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -58,7 +58,7 @@ classifiers = [
+ ]
+ dependencies = [
+     "Jinja2>=3.0",
+-    "Pygments>=2.12",
++    "Pygments>=2.13",
+     "docutils>=0.14,<0.20",
+     "snowballstemmer>=2.0",
+     "babel>=2.9",
+diff --git a/tests/test_ext_viewcode.py b/tests/test_ext_viewcode.py
+index 7750b8d..6d443d1 100644
+--- a/tests/test_ext_viewcode.py
++++ b/tests/test_ext_viewcode.py
+@@ -2,6 +2,7 @@
+ 
+ import re
+ 
++import pygments
+ import pytest
+ 
+ 
+@@ -31,14 +32,24 @@ def test_viewcode(app, status, warning):
+ 
+     result = (app.outdir / '_modules/spam/mod1.html').read_text(encoding='utf8')
+     result = re.sub('<span class=".*?">', '<span>', result)  # filter pygments classes
+-    assert ('<div class="viewcode-block" id="Class1"><a class="viewcode-back" '
+-            'href="../../index.html#spam.Class1">[docs]</a>'
+-            '<span>@decorator</span>\n'
+-            '<span>class</span> <span>Class1</span>'
+-            '<span>(</span><span>object</span><span>):</span>\n'
+-            '    <span>&quot;&quot;&quot;</span>\n'
+-            '<span>    this is Class1</span>\n'
+-            '<span>    &quot;&quot;&quot;</span></div>\n') in result
++    if pygments.__version__ >= '2.14.0':
++        assert ('<div class="viewcode-block" id="Class1"><a class="viewcode-back" '
++                'href="../../index.html#spam.Class1">[docs]</a>'
++                '<span>@decorator</span>\n'
++                '<span>class</span> <span>Class1</span>'
++                '<span>(</span><span>object</span><span>):</span>\n'
++                '<span>    </span><span>&quot;&quot;&quot;</span>\n'
++                '<span>    this is Class1</span>\n'
++                '<span>    &quot;&quot;&quot;</span></div>\n') in result
++    else:
++        assert ('<div class="viewcode-block" id="Class1"><a class="viewcode-back" '
++                'href="../../index.html#spam.Class1">[docs]</a>'
++                '<span>@decorator</span>\n'
++                '<span>class</span> <span>Class1</span>'
++                '<span>(</span><span>object</span><span>):</span>\n'
++                '    <span>&quot;&quot;&quot;</span>\n'
++                '<span>    this is Class1</span>\n'
++                '<span>    &quot;&quot;&quot;</span></div>\n') in result
+ 
+ 
+ @pytest.mark.sphinx('epub', testroot='ext-viewcode')
+diff --git a/tests/test_intl.py b/tests/test_intl.py
+index 796d95b..956352c 100644
+--- a/tests/test_intl.py
++++ b/tests/test_intl.py
+@@ -7,6 +7,7 @@ import os
+ import re
+ 
+ import docutils
++import pygments
+ import pytest
+ from babel.messages import mofile, pofile
+ from babel.messages.catalog import Catalog
+@@ -1105,8 +1106,11 @@ def test_additional_targets_should_not_be_translated(app):
+     expected_expr = ("""<span class="n">literal</span>"""
+                      """<span class="o">-</span>"""
+                      """<span class="n">block</span>\n"""
+-                     """<span class="k">in</span> """
++                     """<span class="k">in</span>"""
++                     """<span class="w"> </span>"""
+                      """<span class="n">list</span>""")
++    if pygments.__version__ < '2.14.0':
++        expected_expr = expected_expr.replace("""<span class="w"> </span>""", ' ')
+     assert_count(expected_expr, result, 1)
+ 
+     # doctest block should not be translated but be highlighted
+@@ -1184,8 +1188,11 @@ def test_additional_targets_should_be_translated(app):
+     expected_expr = ("""<span class="no">LITERAL</span>"""
+                      """<span class="o">-</span>"""
+                      """<span class="no">BLOCK</span>\n"""
+-                     """<span class="no">IN</span> """
++                     """<span class="no">IN</span>"""
++                     """<span class="w"> </span>"""
+                      """<span class="no">LIST</span>""")
++    if pygments.__version__ < '2.14.0':
++        expected_expr = expected_expr.replace("""<span class="w"> </span>""", ' ')
+     assert_count(expected_expr, result, 1)
+ 
+     # doctest block should not be translated but be highlighted

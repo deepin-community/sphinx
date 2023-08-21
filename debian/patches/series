@@ -1,11 +1,14 @@
 disable_js_version_check.diff
 skip_tests_network.diff
 no_external_css.diff
-no_external_image.diff
 remove_contrib_references.diff
 skip_tests_jsmath.diff
 use_packaged_mathjax.diff
 skip_tests_serializinghtml.diff
 move_sphinxcontrib_to_extras_require.diff
 intersphinx_local.diff
-reproducible_restify.diff
+support_old_search_indexes.diff
+highlight_search_terms.diff
+pygments_2.14.diff
+docutils_manpage_macros.diff
+imgmath_path.diff

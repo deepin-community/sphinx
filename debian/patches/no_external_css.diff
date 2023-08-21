@@ -3,25 +3,11 @@ Date: Sat, 14 Apr 2018 10:10:45 +0100
 Subject: Don't use Google Fonts to avoid privacy breach.
 
 ---
- doc/_themes/sphinx13/layout.html  | 2 --
  sphinx/themes/pyramid/layout.html | 2 --
- 2 files changed, 4 deletions(-)
+ 1 file changed, 2 deletions(-)
 
-diff --git a/doc/_themes/sphinx13/layout.html b/doc/_themes/sphinx13/layout.html
-index e3bb37d..da81dd0 100644
---- a/doc/_themes/sphinx13/layout.html
-+++ b/doc/_themes/sphinx13/layout.html
-@@ -14,8 +14,6 @@
- {% block sidebar2 %}{% endblock %}
- 
- {% block extrahead %}
--    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
--          rel='stylesheet' type='text/css' />
- {{ super() }}
- {%- if not embedded %}
-     <style type="text/css">
 diff --git a/sphinx/themes/pyramid/layout.html b/sphinx/themes/pyramid/layout.html
-index 02eec1c..74c8d38 100644
+index ffa9313..19f351d 100644
 --- a/sphinx/themes/pyramid/layout.html
 +++ b/sphinx/themes/pyramid/layout.html
 @@ -1,8 +1,6 @@
