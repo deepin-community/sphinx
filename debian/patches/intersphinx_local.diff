@@ -10,10 +10,10 @@ during build.
  2 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/doc/conf.py b/doc/conf.py
-index d24ef11..74be5b5 100644
+index 416158f..a262354 100644
 --- a/doc/conf.py
 +++ b/doc/conf.py
-@@ -118,9 +118,8 @@ texinfo_documents = [
+@@ -117,9 +117,8 @@ texinfo_documents = [
  ]
  
  intersphinx_mapping = {
@@ -26,7 +26,7 @@ index d24ef11..74be5b5 100644
  
  # Sphinx document translation with sphinx gettext feature uses these settings:
 diff --git a/doc/tutorial/deploying.rst b/doc/tutorial/deploying.rst
-index 76b68c3..619b502 100644
+index e16abdf..1c4e3c6 100644
 --- a/doc/tutorial/deploying.rst
 +++ b/doc/tutorial/deploying.rst
 @@ -160,13 +160,16 @@ Read the Docs
