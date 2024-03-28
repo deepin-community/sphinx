@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright © 2011 Jakub Wilk <jwilk@debian.org>
-#           © 2014-2020 Dmitry Shachnev <mitya57@debian.org>
+#           © 2014-2024 Dmitry Shachnev <mitya57@debian.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -116,6 +116,7 @@ use strict;
 use warnings;
 
 use Digest::MD5;
+use File::Basename;
 use File::Find;
 use Debian::Debhelper::Dh_Lib;
 use JSON;
@@ -159,6 +160,13 @@ sub load_packaged_js()
         wanted => sub {
             my $js = $_;
             my ($jsbase, $jsname) = m{([0-9.]+/(\S+[.]js))$} or return;
+            if ($jsbase =~ m{1\.0/(jquery|underscore)\.js})
+            {
+                # These files are still shipped in libjs-sphinxdoc in order not to break
+                # symlinks in previously built -doc packages. They will be dropped in some
+                # future libjs-sphinxdoc version. After that, this check can be removed.
+                return;
+            }
             my $version = $versions{$jsbase};
             defined($version) or error("$jsbase is not in the index; is it up-to-date?");
             delete $versions{$jsbase};
@@ -188,6 +196,17 @@ sub load_packaged_js()
         no_chdir => 1
     }, $path);
     map { error("$path/$_ is missing") } keys(%versions);
+    my %legacy_dependencies = (
+        "/usr/share/javascript/jquery/jquery.js" => "libjs-jquery (>= 3.6.0)",
+        "/usr/share/javascript/jquery/jquery.min.js" => "libjs-jquery (>= 3.6.0)",
+        "/usr/share/javascript/underscore/underscore.js" => "libjs-underscore (>= 1.3.1)",
+        "/usr/share/javascript/underscore/underscore.min.js" => "libjs-underscore (>= 1.3.1)",
+    );
+    while (my ($jsname, $dependency) = each %legacy_dependencies)
+    {
+        $packaged_js{md5($jsname)} = [$jsname, $dependency];
+        $packaged_js{basename($jsname)} = [$jsname, $dependency];
+    }
 }
 
 sub looks_like_sphinx_doc($)
@@ -280,21 +299,31 @@ sub sanity_check($$)
     my ($has_source) = $documentation_options =~ m{HAS_SOURCE:\s*(true|false)};
     my ($sourcelink_suffix) = $documentation_options =~ m{SOURCELINK_SUFFIX:\s*'([^']*)'};
     $sourcelink_suffix = ".txt" unless defined $sourcelink_suffix;
-    my $url_root;
-    if ($documentation_options =~ /\QURL_ROOT: document.getElementById("documentation_options")\E/)
+    my ($content_root) = $search =~ m{data-content_root="([^"]*)"};
+    unless (defined $content_root)
     {
-        ($url_root) = $search =~ m{data-url_root="([^"]*)"};
+        # Support the way zzzeeksphinx is setting it.
+        ($content_root) = $search =~ m{document\.documentElement\.dataset\.content_root = '([^']*)';};
     }
-    else
+    unless (defined $content_root)
     {
-        ($url_root) = $documentation_options =~ m{URL_ROOT:\s*'([^']*)'};
+        # We support fallback options using support_old_search_indexes.diff.
+        # Drop this block when that patch gets removed.
+        if ($documentation_options =~ /\QURL_ROOT: document.getElementById("documentation_options")\E/)
+        {
+            ($content_root) = $search =~ m{data-url_root="([^"]*)"};
+        }
+        else
+        {
+            ($content_root) = $documentation_options =~ m{URL_ROOT:\s*'([^']*)'};
+        }
     }
     %js or error("$searchfn does not include any JavaScript code");
     $singlehtml_file or $loads_searchindex or error("$searchfn does not load searchindex.js");
     defined $has_source or error("DOCUMENTATION_OPTIONS does not define HAS_SOURCE");
-    defined $url_root or error("DOCUMENTATION_OPTIONS does not define URL_ROOT");
+    defined $content_root or error("$searchfn top-level node does not have data-content_root attribute");
     $has_source = $has_source eq 'true';
-    $url_root =~ m{^([a-z]+:/)?/} and error("URL_ROOT in $searchfn is not relative");
+    $content_root =~ m{^([a-z]+:/)?/} and error("content_root in $searchfn is not relative");
     for my $js (keys(%js))
     {
         -f "$path/$js" or -l "$path/$js" or error("$path/$js is missing");
@@ -335,7 +364,18 @@ sub unknown_javascript($)
     $js =~ s{.*/}{};
     my $basic = grep { $_ eq $js } qw(searchtools.js doctools.js jquery.js underscore.js);
     my $cruft = grep { $_ eq $js } @cruft_js;
-    my $basic_ignored = grep { $_ eq $js } qw(theme.js documentation_options.js language_data.js sidebar.js searchindex.js);
+    my @ignored_files = (
+        "documentation_options.js",
+        "language_data.js",
+        "searchindex.js",
+        "sidebar.js",
+        "theme.js",
+        # _sphinx_javascript_frameworks_compat.js is shipped in python3-sphinxcontrib.jquery.
+        # That package brings dependency on python3-sphinx itself, which we don't want in
+        # documentation packages. Given it's just 4.2 KB, ignore it.
+        "_sphinx_javascript_frameworks_compat.js",
+    );
+    my $basic_ignored = grep { $_ eq $js } @ignored_files;
     if ($basic)
     {
         error("error: $message");

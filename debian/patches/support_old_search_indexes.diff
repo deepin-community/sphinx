@@ -1,21 +1,34 @@
 From: Dmitry Shachnev <mitya57@debian.org>
 Date: Sat, 11 Dec 2021 19:19:27 +0300
-Subject: Make searchtools.js support old searchindex.js files
+Subject: Make searchtools.js support documentation built with old Sphinx
 
 Sphinx 4.3 has changed format of searchindex.js files, but in Debian
 there are lots of packages built with older Sphinx, and we want to
 keep them working for some time.
 
+Also support legacy custom search.html templates, which don't have
+data-content_root attribute on the top-level element.
+
 Forwarded: not-needed
 ---
- sphinx/themes/basic/static/searchtools.js | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ sphinx/themes/basic/static/searchtools.js | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/sphinx/themes/basic/static/searchtools.js b/sphinx/themes/basic/static/searchtools.js
-index e89e34d..8279279 100644
+index 7918c3f..09d6458 100644
 --- a/sphinx/themes/basic/static/searchtools.js
 +++ b/sphinx/themes/basic/static/searchtools.js
-@@ -426,11 +426,14 @@ const Search = {
+@@ -62,7 +62,8 @@ const _displayItem = (item, searchTerms, highlightTerms) => {
+   const docFileSuffix = DOCUMENTATION_OPTIONS.FILE_SUFFIX;
+   const docLinkSuffix = DOCUMENTATION_OPTIONS.LINK_SUFFIX;
+   const showSearchSummary = DOCUMENTATION_OPTIONS.SHOW_SEARCH_SUMMARY;
+-  const contentRoot = document.documentElement.dataset.content_root;
++  const contentRoot = document.documentElement.dataset.content_root
++    ?? DOCUMENTATION_OPTIONS.URL_ROOT;
+ 
+   const [docName, title, anchor, descr, score, _filename] = item;
+ 
+@@ -434,11 +435,14 @@ const Search = {
          filenames[match[0]],
        ]);
      };
