@@ -18,8 +18,6 @@ javascript_path = /usr/share/javascript/sphinxdoc/1.0/
 	dh $@ --with python3 --buildsystem=pybuild
 
 override_dh_auto_build:
-	ln -sf /usr/share/javascript/jquery/jquery.js sphinx/themes/basic/static/jquery.js
-	ln -sf /usr/share/javascript/underscore/underscore.js sphinx/themes/basic/static/underscore.js
 	dh_auto_build
 ifeq "$(filter nodoc,$(DEB_BUILD_OPTIONS))" ""
 	PYTHONPATH=$(py3_builddir) python3 ./sphinx/cmd/build.py -T doc build/html/

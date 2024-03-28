@@ -2,7 +2,7 @@
 # encoding=UTF-8
 
 # Copyright © 2011 Jakub Wilk <jwilk@debian.org>
-#           © 2013-2022 Dmitry Shachnev <mitya57@debian.org>
+#           © 2013-2023 Dmitry Shachnev <mitya57@debian.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -68,9 +68,9 @@ class View(QWebEngineView):
             raise TimeoutError
         script = """
         result = {
-            n_results: $('#search-results > p:first').text().match(/found (\d+) page/)[1],
-            n_links: $('#search-results a').length,
-            n_highlights: $('#search-results .highlighted').length,
+            n_results: document.querySelector('#search-results > p').textContent.match(/found (\\d+) page/)[1],
+            n_links: document.querySelectorAll('#search-results a').length,
+            n_highlights: document.querySelectorAll('#search-results .highlighted').length,
         };
         result
         """

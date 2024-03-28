@@ -7,10 +7,10 @@ Subject: Skip tests that require sphinxcontrib.serializinghtml module
  1 file changed, 2 insertions(+)
 
 diff --git a/tests/test_api_translator.py b/tests/test_api_translator.py
-index 25aee0c..033d5d4 100644
+index 2185fb8..66aa17f 100644
 --- a/tests/test_api_translator.py
 +++ b/tests/test_api_translator.py
-@@ -40,6 +40,7 @@ def test_singlehtml_set_translator_for_singlehtml(app, status, warning):
+@@ -36,6 +36,7 @@ def test_singlehtml_set_translator_for_singlehtml(app, status, warning):
      assert translator_class.__name__ == 'ConfSingleHTMLTranslator'
  
  
@@ -18,7 +18,7 @@ index 25aee0c..033d5d4 100644
  @pytest.mark.sphinx('pickle', testroot='api-set-translator')
  def test_pickle_set_translator_for_pickle(app, status, warning):
      translator_class = app.builder.get_translator_class()
-@@ -47,6 +48,7 @@ def test_pickle_set_translator_for_pickle(app, status, warning):
+@@ -43,6 +44,7 @@ def test_pickle_set_translator_for_pickle(app, status, warning):
      assert translator_class.__name__ == 'ConfPickleTranslator'
  
  

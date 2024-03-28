@@ -9,21 +9,21 @@ from PyQt6.QtWidgets import QApplication
 
 class t1:
     search_term = 'example'
-    n_results = 83
-    n_links = 83
-    n_highlights = 98
+    n_results = 85
+    n_links = 85
+    n_highlights = 101
 
 class t2:
     search_term = 'examples'
-    n_results = 74
-    n_links = 74
+    n_results = 76
+    n_links = 76
     n_highlights = 17
 
 class t3:
     search_term = 'graph'
     n_results = 33
     n_links = 33
-    n_highlights = 125
+    n_highlights = 124
 
 if __name__ == '__main__':
     if not os.getenv('DISPLAY'):
