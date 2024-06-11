@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e -u
 
-export GTK_A11Y=none
-
 cp -r debian/jstest "$AUTOPKGTEST_TMP/"
 cd "$AUTOPKGTEST_TMP"
 for format in rst html

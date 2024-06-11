@@ -4,16 +4,14 @@ Subject: Skip tests that require network access
 
 Forwarded: not-needed
 ---
- tests/test_build_latex.py     | 1 +
- tests/test_build_linkcheck.py | 3 +++
- tests/test_setup_command.py   | 1 +
- 3 files changed, 5 insertions(+)
+ tests/test_build_latex.py | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/tests/test_build_latex.py b/tests/test_build_latex.py
-index 004fc02..374e5ee 100644
+index f6c3369..5996203 100644
 --- a/tests/test_build_latex.py
 +++ b/tests/test_build_latex.py
-@@ -1384,6 +1384,7 @@ def test_latex_raw_directive(app, status, warning):
+@@ -1420,6 +1420,7 @@ def test_latex_raw_directive(app, status, warning):
      assert 'LaTeX: abc def ghi' in result
  
  
@@ -21,43 +19,3 @@ index 004fc02..374e5ee 100644
  @pytest.mark.sphinx('latex', testroot='images')
  def test_latex_images(app, status, warning):
      app.builder.build_all()
-diff --git a/tests/test_build_linkcheck.py b/tests/test_build_linkcheck.py
-index 631c7fa..5df6b87 100644
---- a/tests/test_build_linkcheck.py
-+++ b/tests/test_build_linkcheck.py
-@@ -23,6 +23,7 @@ from .utils import CERT_FILE, http_server, https_server
- ts_re = re.compile(r".*\[(?P<ts>.*)\].*")
- 
- 
-+@pytest.mark.skip('Requires internet access')
- @pytest.mark.sphinx('linkcheck', testroot='linkcheck', freshenv=True)
- def test_defaults(app):
-     app.build()
-@@ -44,6 +45,7 @@ def test_defaults(app):
-     assert len(content.splitlines()) == 7
- 
- 
-+@pytest.mark.skip('Requires internet access')
- @pytest.mark.sphinx('linkcheck', testroot='linkcheck', freshenv=True)
- def test_defaults_json(app):
-     app.build()
-@@ -105,6 +107,7 @@ def test_defaults_json(app):
-     }
- 
- 
-+@pytest.mark.skip('Requires internet access')
- @pytest.mark.sphinx(
-     'linkcheck', testroot='linkcheck', freshenv=True,
-     confoverrides={'linkcheck_anchors_ignore': ["^!", "^top$"],
-diff --git a/tests/test_setup_command.py b/tests/test_setup_command.py
-index ef36467..6b36ac9 100644
---- a/tests/test_setup_command.py
-+++ b/tests/test_setup_command.py
-@@ -99,6 +99,7 @@ def test_build_sphinx_with_nonascii_path(setup_command):
-     assert proc.returncode == 0
- 
- 
-+@pytest.mark.skip('Requires internet access')
- @pytest.mark.setup_command('-b', 'linkcheck')
- def test_build_sphinx_return_nonzero_status(setup_command):
-     srcdir = (setup_command.pkgroot / 'doc')

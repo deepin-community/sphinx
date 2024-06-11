@@ -1,3 +1,2 @@
 version=4
-opts=pgpsigurlmangle=s/$/.asc/ \
-https://pypi.debian.net/Sphinx/Sphinx-([\d.]+)\.tar\.gz
+https://pypi.debian.net/Sphinx/[Ss]phinx-([\d.]+)\.tar\.gz

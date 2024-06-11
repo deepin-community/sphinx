@@ -5,13 +5,12 @@ Subject: Remove references to sphinxcontrib modules
 They are not packaged yet, and when they are, we would want to avoid
 dependency loops anyway.
 ---
- doc/usage/builders/index.rst     | 24 ------------------------
- sphinx/application.py            |  6 ------
- sphinx/builders/html/__init__.py |  2 --
- 3 files changed, 32 deletions(-)
+ doc/usage/builders/index.rst | 24 ------------------------
+ sphinx/application.py        |  1 -
+ 2 files changed, 25 deletions(-)
 
 diff --git a/doc/usage/builders/index.rst b/doc/usage/builders/index.rst
-index 4d53152..4f7bdb6 100644
+index ce2c5dc..01172a7 100644
 --- a/doc/usage/builders/index.rst
 +++ b/doc/usage/builders/index.rst
 @@ -68,12 +68,6 @@ The builder's "name" must be given to the **-b** command-line option of
@@ -67,32 +66,14 @@ index 4d53152..4f7bdb6 100644
  
        Moved to sphinxcontrib.devhelp from sphinx.builders package.
 diff --git a/sphinx/application.py b/sphinx/application.py
-index 10c03a2..c83fcc2 100644
+index 73c157d..ebb47ca 100644
 --- a/sphinx/application.py
 +++ b/sphinx/application.py
-@@ -99,12 +99,6 @@ builtin_extensions = (
-     'sphinx.environment.collectors.metadata',
-     'sphinx.environment.collectors.title',
-     'sphinx.environment.collectors.toctree',
--    # 1st party extensions
--    'sphinxcontrib.applehelp',
--    'sphinxcontrib.devhelp',
--    'sphinxcontrib.htmlhelp',
--    'sphinxcontrib.serializinghtml',
--    'sphinxcontrib.qthelp',
-     # Strictly, alabaster theme is not a builtin extension,
-     # but it is loaded automatically to use it as default theme.
+@@ -116,7 +116,6 @@ _first_party_themes = (
      'alabaster',
-diff --git a/sphinx/builders/html/__init__.py b/sphinx/builders/html/__init__.py
-index 4fe40eb..861232e 100644
---- a/sphinx/builders/html/__init__.py
-+++ b/sphinx/builders/html/__init__.py
-@@ -1350,8 +1350,6 @@ def deprecate_html_4(_app: Sphinx, config: Config) -> None:
+ )
+ builtin_extensions += _first_party_themes
+-builtin_extensions += _first_party_extensions
  
- 
- # for compatibility
--import sphinxcontrib.serializinghtml  # NOQA
--
- import sphinx.builders.dirhtml  # NOQA
- import sphinx.builders.singlehtml  # NOQA
+ ENV_PICKLE_FILENAME = 'environment.pickle'
  

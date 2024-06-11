@@ -1,0 +1,68 @@
+From: Pietro Albini <pietro@pietroalbini.org>
+Date: Sat, 16 Sep 2023 05:36:51 +0200
+Subject: Make `searchindex.js` deterministic (#11665)
+
+(cherry picked from commit 8e768e6c231c67caadecd5b43c20eb1f3a594079)
+---
+ sphinx/search/__init__.py |  2 +-
+ tests/test_search.py      | 37 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/sphinx/search/__init__.py b/sphinx/search/__init__.py
+index 21758d3..114d7fe 100644
+--- a/sphinx/search/__init__.py
++++ b/sphinx/search/__init__.py
+@@ -162,7 +162,7 @@ class _JavaScriptIndex:
+     SUFFIX = ')'
+ 
+     def dumps(self, data: Any) -> str:
+-        return self.PREFIX + json.dumps(data) + self.SUFFIX
++        return self.PREFIX + json.dumps(data, sort_keys=True) + self.SUFFIX
+ 
+     def loads(self, s: str) -> Any:
+         data = s[len(self.PREFIX):-len(self.SUFFIX)]
+diff --git a/tests/test_search.py b/tests/test_search.py
+index 68a7b01..d4bbef5 100644
+--- a/tests/test_search.py
++++ b/tests/test_search.py
+@@ -304,3 +304,40 @@ def test_parallel(app):
+     app.build()
+     index = load_searchindex(app.outdir / 'searchindex.js')
+     assert index['docnames'] == ['index', 'nosearch', 'tocitem']
++
++
++@pytest.mark.sphinx(testroot='search')
++def test_search_index_is_deterministic(app):
++    lists_not_to_sort = {
++        # Each element of .titles is related to the element of .docnames in the same position.
++        # The ordering is deterministic because .docnames is sorted.
++        '.titles',
++        # Each element of .filenames is related to the element of .docnames in the same position.
++        # The ordering is deterministic because .docnames is sorted.
++        '.filenames',
++    }
++
++    # In the search index, titles inside .alltitles are stored as a tuple of
++    # (document_idx, title_anchor). Tuples are represented as lists in JSON,
++    # but their contents must not be sorted. We cannot sort them anyway, as
++    # document_idx is an int and title_anchor is a str.
++    def is_title_tuple_type(item):
++        return len(item) == 2 and isinstance(item[0], int) and isinstance(item[1], str)
++
++    def assert_is_sorted(item, path):
++        err_path = path if path else '<root>'
++        if isinstance(item, dict):
++            assert list(item.keys()) == sorted(item.keys()), f'{err_path} is not sorted'
++            for key, value in item.items():
++                assert_is_sorted(value, f'{path}.{key}')
++        elif isinstance(item, list):
++            if not is_title_tuple_type(item) and path not in lists_not_to_sort:
++                assert item == sorted(item), f'{err_path} is not sorted'
++            for i, child in enumerate(item):
++                assert_is_sorted(child, f'{path}[{i}]')
++
++    app.builder.build_all()
++    index = load_searchindex(app.outdir / 'searchindex.js')
++    # Pretty print the index. Only shown by pytest on failure.
++    print(f'searchindex.js contents:\n\n{json.dumps(index, indent=2)}')
++    assert_is_sorted(index, '')
