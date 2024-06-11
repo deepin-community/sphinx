@@ -7,12 +7,12 @@ Subject: Use packaged MathJax (for our own documentation)
  1 file changed, 1 insertion(+)
 
 diff --git a/doc/conf.py b/doc/conf.py
-index ec845be..d24ef11 100644
+index d4915aa..416158f 100644
 --- a/doc/conf.py
 +++ b/doc/conf.py
-@@ -127,6 +127,7 @@ intersphinx_mapping = {
- locale_dirs = ['locale/']
- gettext_compact = False
+@@ -185,6 +185,7 @@ nitpick_ignore = {
+     ('std:confval', 'globaltoc_maxdepth'),
+ }
  
 +mathjax_path = 'file:///usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
  
