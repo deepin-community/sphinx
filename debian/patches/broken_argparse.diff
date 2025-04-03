@@ -1,0 +1,23 @@
+From: Dmitry Shachnev <mitya57@debian.org>
+Date: Sat, 16 Nov 2024 22:25:35 +0300
+Subject: Update broken_argparse check
+
+Debian's python3.13 version 3.13.0-2 seems to have working argparse.
+
+Forwarded: not-needed
+---
+ tests/test_command_line.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tests/test_command_line.py b/tests/test_command_line.py
+index 63fb9e0..a6b074a 100644
+--- a/tests/test_command_line.py
++++ b/tests/test_command_line.py
+@@ -12,7 +12,6 @@ from sphinx.cmd.make_mode import run_make_mode
+ 
+ broken_argparse = (
+     sys.version_info[:3] <= (3, 12, 6)
+-    or sys.version_info[:3] == (3, 13, 0)
+ )  # fmt: skip
+ 
+ DEFAULTS = {

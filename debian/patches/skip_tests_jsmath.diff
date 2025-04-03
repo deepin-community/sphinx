@@ -3,34 +3,34 @@ Date: Wed, 25 Dec 2019 23:37:50 +0300
 Subject: Skip tests that require sphinxcontrib.jsmath module
 
 ---
- tests/test_build_html.py | 3 +++
+ tests/test_builders/test_build_html_maths.py | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/tests/test_build_html.py b/tests/test_build_html.py
-index 07f101d..beef440 100644
---- a/tests/test_build_html.py
-+++ b/tests/test_build_html.py
-@@ -1544,6 +1544,7 @@ def test_html_math_renderer_is_imgmath(app, status, warning):
+diff --git a/tests/test_builders/test_build_html_maths.py b/tests/test_builders/test_build_html_maths.py
+index 0f77691..4ce2953 100644
+--- a/tests/test_builders/test_build_html_maths.py
++++ b/tests/test_builders/test_build_html_maths.py
+@@ -26,6 +26,7 @@ def test_html_math_renderer_is_imgmath(app):
      assert app.builder.math_renderer_name == 'imgmath'
  
  
 +@pytest.mark.skip('Requires sphinxcontrib.jsmath module')
- @pytest.mark.sphinx('html', testroot='basic',
-                     confoverrides={'extensions': ['sphinxcontrib.jsmath',
-                                                   'sphinx.ext.imgmath']})
-@@ -1564,6 +1565,7 @@ def test_html_math_renderer_is_duplicated2(app, status, warning):
+ @pytest.mark.sphinx(
+     'html',
+     testroot='basic',
+@@ -50,6 +51,7 @@ def test_html_math_renderer_is_duplicated2(app):
      assert app.builder.math_renderer_name == 'imgmath'  # The another one is chosen
  
  
 +@pytest.mark.skip('Requires sphinxcontrib.jsmath module')
- @pytest.mark.sphinx('html', testroot='basic',
-                     confoverrides={'extensions': ['sphinxcontrib.jsmath',
-                                                   'sphinx.ext.imgmath'],
-@@ -1572,6 +1574,7 @@ def test_html_math_renderer_is_chosen(app, status, warning):
+ @pytest.mark.sphinx(
+     'html',
+     testroot='basic',
+@@ -62,6 +64,7 @@ def test_html_math_renderer_is_chosen(app):
      assert app.builder.math_renderer_name == 'imgmath'
  
  
 +@pytest.mark.skip('Requires sphinxcontrib.jsmath module')
- @pytest.mark.sphinx('html', testroot='basic',
-                     confoverrides={'extensions': ['sphinxcontrib.jsmath',
-                                                   'sphinx.ext.mathjax'],
+ @pytest.mark.sphinx(
+     'html',
+     testroot='basic',
