@@ -5,7 +5,7 @@ export NO_PKG_MANGLE=1
 export LC_ALL=C.UTF-8
 export PYTHONWARNINGS=d
 
-export PYBUILD_TEST_ARGS=--verbose --ignore tests/test_api_translator.py
+export PYBUILD_TEST_ARGS=--verbose --ignore tests/test_writers/test_api_translator.py
 
 locales = $(notdir $(patsubst %/LC_MESSAGES,%,$(wildcard sphinx/locale/*/LC_MESSAGES)))
 
@@ -22,7 +22,7 @@ override_dh_auto_build:
 ifeq "$(filter nodoc,$(DEB_BUILD_OPTIONS))" ""
 	PYTHONPATH=$(py3_builddir) python3 ./sphinx/cmd/build.py -T doc build/html/
 	find build/html/ -name '*.txt' -or -name '*.html' | xargs -L1 sed -i \
-		's!http://docutils.sourceforge.net/docs/!file:///usr/share/doc/docutils-doc/docs/!g'
+		's!https://docutils.sourceforge.io/docs/!file:///usr/share/doc/docutils-doc/docs/!g'
 	PYTHONPATH=$(py3_builddir) python3 ./sphinx/cmd/build.py -T -b man doc build/man
 endif
 	PYTHONPATH=$(py3_builddir) python3 ./utils/babel_runner.py compile
@@ -64,7 +64,7 @@ override_dh_auto_install:
 	done
 
 override_dh_installchangelogs:
-	dh_installchangelogs CHANGES
+	dh_installchangelogs CHANGES.rst
 
 override_dh_installdocs:
 	dh_installdocs

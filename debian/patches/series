@@ -1,4 +1,3 @@
-skip_tests_network.diff
 no_external_css.diff
 remove_contrib_references.diff
 skip_tests_jsmath.diff
@@ -6,8 +5,6 @@ use_packaged_mathjax.diff
 skip_tests_serializinghtml.diff
 move_sphinxcontrib_to_extras_require.diff
 intersphinx_local.diff
-support_old_search_indexes.diff
-docutils_manpage_macros.diff
-python_3.11.7.diff
-python_3.12.3.diff
-reproducible_searchindex.diff
+fix_test_format_date_timezone.diff
+broken_argparse.diff
+source_date_epoch.diff

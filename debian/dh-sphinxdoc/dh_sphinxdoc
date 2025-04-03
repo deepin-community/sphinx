@@ -60,9 +60,9 @@ to B<${sphinxdoc:Depends}>.
 
 It provides a B<${sphinxdoc:Built-Using}> substitution variable, for tracking
 files which could not be symlinked. Examples of such files are F<*.js> and F<*.css>
-files that are generated from corresponding F<*.js_t> and F<*.css_t> templates,
+files that are generated from corresponding F<*.js.jinja> and F<*.css.jinja> templates,
 and can vary depending on the used theme options (for instance, F<basic.css> file
-is generated from F<basic.css_t> and is included in almost every Sphinx-generated
+is generated from F<basic.css.jinja> and is included in almost every Sphinx-generated
 documentation). Currently, this variable will contain B<sphinx> and, if the default
 theme is used, B<alabaster>, with their versions (other themes are not supported).
 
@@ -290,7 +290,7 @@ sub sanity_check($$)
         }
     }
     defined $documentation_options or error("DOCUMENTATION_OPTIONS not found");
-    my $loads_searchindex = $search =~ m{<script(?: type="text/javascript")? src="[^"]*searchindex.js\s?"(?: defer)?>};
+    my $loads_searchindex = $search =~ m{<script(?: type="text/javascript")? src="[^"]*searchindex.js\s?"(?: defer(?:="defer")?)?>};
     unless ($loads_searchindex)
     {
         # old style, used before Sphinx 2.0
