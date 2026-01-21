@@ -1,0 +1,22 @@
+From: Adam Turner <9087854+AA-Turner@users.noreply.github.com>
+Date: Tue, 29 Jul 2025 19:44:31 +0200
+Subject: Bump docutils upper limit to 0.23
+
+(cherry picked from commit 5d3bb2e3b7c47e4ecd540c657018f16b961c821b)
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index f8b1bb0..ae54f03 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -58,7 +58,7 @@ classifiers = [
+ dependencies = [
+     "Jinja2>=3.1",
+     "Pygments>=2.17",
+-    "docutils>=0.20,<0.22",
++    "docutils>=0.20,<0.23",
+     "snowballstemmer>=2.2",
+     "babel>=2.13",
+     "alabaster>=0.7.14",

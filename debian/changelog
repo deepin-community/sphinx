@@ -2,8 +2,9 @@ sphinx (8.1.3-5deepin1) unstable; urgency=medium
 
   * Build-depend on python3-roman-numerals.
   * Use roman_numerals.RomanNumeral instead of roman.toRoman
+  * Docutils ≥ 0.22.1 compat.
 
- -- Tianyu Chen <sweetyfish@deepin.org>  Wed, 21 Jan 2026 13:48:56 +0800
+ -- Tianyu Chen <sweetyfish@deepin.org>  Wed, 21 Jan 2026 14:20:48 +0800
 
 sphinx (8.1.3-5) unstable; urgency=medium
 

@@ -1,0 +1,50 @@
+From: James Addison <55152140+jayaddison@users.noreply.github.com>
+Date: Mon, 2 Jun 2025 22:02:48 +0000
+Subject: Tests: update LaTeX label test expectations from Docutils r10151
+ (#13610)
+
+Co-authored-by: Adam Turner <9087854+AA-Turner@users.noreply.github.com>
+(cherry picked from commit 68d56109ff50dd81dd31d4a01e3dccbd006c50ee)
+---
+ tests/test_builders/test_build_latex.py | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_builders/test_build_latex.py b/tests/test_builders/test_build_latex.py
+index ea6dc74..4bf763c 100644
+--- a/tests/test_builders/test_build_latex.py
++++ b/tests/test_builders/test_build_latex.py
+@@ -8,6 +8,7 @@ from pathlib import Path
+ from shutil import copyfile
+ from subprocess import CalledProcessError
+ 
++import docutils
+ import pytest
+ 
+ from sphinx.builders.latex import default_latex_documents
+@@ -1960,10 +1961,16 @@ def test_latex_labels(app):
+ 
+     result = (app.outdir / 'projectnamenotset.tex').read_text(encoding='utf8')
+ 
++    # ref: docutils r10151
++    if docutils.__version_info__[:2] < (0, 22):
++        figure_id, table_id = 'id1', 'id2'
++    else:
++        figure_id, table_id = 'id2', 'id3'
++
+     # figures
+     assert (
+         r'\caption{labeled figure}'
+-        r'\label{\detokenize{index:id1}}'
++        r'\label{\detokenize{index:' + figure_id + '}}'
+         r'\label{\detokenize{index:figure2}}'
+         r'\label{\detokenize{index:figure1}}'
+         r'\end{figure}'
+@@ -1989,7 +1996,7 @@ def test_latex_labels(app):
+     # tables
+     assert (
+         r'\sphinxcaption{table caption}'
+-        r'\label{\detokenize{index:id2}}'
++        r'\label{\detokenize{index:' + table_id + '}}'
+         r'\label{\detokenize{index:table2}}'
+         r'\label{\detokenize{index:table1}}'
+     ) in result

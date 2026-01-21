@@ -10,3 +10,6 @@ broken_argparse.diff
 source_date_epoch.diff
 0011-Account-for-removal-of-docutils.utils.roman.patch
 0012-Use-new-package-name-for-roman-numerals.patch
+0013-Tests-update-LaTeX-label-test-expectations-from-Docu.patch
+0014-Fix-test-setup-for-directive-tests.patch
+0015-Bump-docutils-upper-limit-to-0.23.patch
