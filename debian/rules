@@ -30,7 +30,7 @@ endif
 override_dh_auto_install:
 	pybuild --install -p $(shell py3versions -vd)
 	# move static files outside dist-packages
-	sed -i -e "s!^package_dir = .*!package_dir = '/usr/share/sphinx'!" \
+	sed -i -e "s!^package_dir: Final = .*!package_dir: Final = _StrPath('/usr/share/sphinx')!" \
 		$(debroot)$(py3_libdir)/sphinx/__init__.py
 	mkdir -p $(debroot)/usr/share/sphinx
 	cd $(debroot) && mv -t usr/share/sphinx/ \

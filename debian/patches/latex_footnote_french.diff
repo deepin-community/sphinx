@@ -1,0 +1,27 @@
+From: Jean-François B. <jfbu@users.noreply.github.com>
+Date: Sat, 15 Nov 2025 09:40:09 +0100
+Subject: Fix PDF build crash with French since August 2025 LaTeX
+
+(cherry picked from commit 5b922b4ba99217b0ea66b210f9fb77a48071ab6d)
+---
+ sphinx/texinputs/sphinxpackagefootnote.sty | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/sphinx/texinputs/sphinxpackagefootnote.sty b/sphinx/texinputs/sphinxpackagefootnote.sty
+index 7f2e291..3b65a9f 100644
+--- a/sphinx/texinputs/sphinxpackagefootnote.sty
++++ b/sphinx/texinputs/sphinxpackagefootnote.sty
+@@ -274,8 +274,11 @@
+    \fi
+ }%
+ \def\FNH@check{%
+-   \ifx\@makefntextFB\@undefined\expandafter\FNH@check@
+-                           \else\expandafter\FNH@frenchb@
++   \ifx\@makefntextFB\@undefined
++       \expandafter\FNH@check@
++   \else
++       \providecommand\localleftbox[1]{}%
++       \expandafter\FNH@frenchb@
+    \fi
+ }%
+ \def\FNH@frenchb@{%

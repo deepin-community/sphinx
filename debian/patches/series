@@ -5,6 +5,11 @@ use_packaged_mathjax.diff
 skip_tests_serializinghtml.diff
 move_sphinxcontrib_to_extras_require.diff
 intersphinx_local.diff
-fix_test_format_date_timezone.diff
-broken_argparse.diff
-source_date_epoch.diff
+docutils_0.22.diff
+docutils_0.22.1.diff
+docutils_upper_limit.diff
+latex_footnote_french.diff
+python3.14_autosummary.diff
+python3.14_typing.diff
+python3.14_autodoc.diff
+roman-numerals-package-name.patch

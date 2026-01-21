@@ -9,14 +9,14 @@ from PyQt6.QtWidgets import QApplication
 
 class t1:
     search_term = 'example'
-    n_results = 101
-    n_links = 101
-    n_highlights = 117
+    n_results = 103
+    n_links = 103
+    n_highlights = 120
 
 class t2:
     search_term = 'examples'
-    n_results = 92
-    n_links = 92
+    n_results = 93
+    n_links = 93
     n_highlights = 25
 
 class t3:

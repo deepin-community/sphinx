@@ -2,24 +2,24 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Sphinx
 
 Files: *
-Copyright: 2007-2024 the Sphinx team (see AUTHORS file)
+Copyright: 2007-2025 the Sphinx team (see AUTHORS file)
 License: BSD-2-clause
 
 Files: debian/dh-sphinxdoc/dh_sphinxdoc
        debian/jstest/jstest.py
 Copyright: 2011 Jakub Wilk <jwilk@debian.org>
-           2013-2024 Dmitry Shachnev <mitya57@debian.org>
+           2013-2025 Dmitry Shachnev <mitya57@debian.org>
 License: BSD-2-clause
 
-Files: sphinx/ext/apidoc.py
+Files: sphinx/ext/apidoc/__init__.py
 Copyright: 2008 Société des arts technologiques (SAT)
-           2007-2024 the Sphinx team
+           2007-2025 the Sphinx team
 License: BSD-2-clause
 
 Files: sphinx/ext/napoleon/docstring.py
 Copyright: 2008 Stefan van der Walt <stefan@mentat.za.net>
            2008 Pauli Virtanen <pav@iki.fi>
-           2007-2024 the Sphinx team
+           2007-2025 the Sphinx team
 License: BSD-2-clause
 
 Files: sphinx/search/minified-js/*
@@ -32,7 +32,7 @@ License: BSD-3-clause
 
 Files: sphinx/themes/haiku/static/haiku.css.jinja
 Copyright: 2008-2009 Haiku
-           2007-2024 the Sphinx team
+           2007-2025 the Sphinx team
 License: Expat and BSD-2-clause
 
 License: BSD-2-clause

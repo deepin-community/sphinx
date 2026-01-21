@@ -2,12 +2,11 @@ From: Dmitry Shachnev <mitya57@debian.org>
 Date: Wed, 25 Dec 2019 23:18:56 +0300
 Subject: Remove references to sphinxcontrib modules
 
-They are not packaged yet, and when they are, we would want to avoid
-dependency loops anyway.
+To avoid dependency loops (these packages depend on sphinx themselves).
 ---
  doc/usage/builders/index.rst | 24 ------------------------
- sphinx/application.py        |  1 -
- 2 files changed, 25 deletions(-)
+ sphinx/application.py        | 13 +++++++++++--
+ 2 files changed, 11 insertions(+), 26 deletions(-)
 
 diff --git a/doc/usage/builders/index.rst b/doc/usage/builders/index.rst
 index e293399..2625fe3 100644
@@ -66,10 +65,24 @@ index e293399..2625fe3 100644
  
        Moved to sphinxcontrib.devhelp from sphinx.builders package.
 diff --git a/sphinx/application.py b/sphinx/application.py
-index 872dd7a..52a690c 100644
+index fe0e8bd..154bfd2 100644
 --- a/sphinx/application.py
 +++ b/sphinx/application.py
-@@ -122,7 +122,6 @@ _first_party_themes = (
+@@ -19,7 +19,12 @@ from sphinx import locale, package_dir
+ from sphinx._cli.util.colour import bold
+ from sphinx.config import Config
+ from sphinx.environment import BuildEnvironment
+-from sphinx.errors import ApplicationError, ConfigError, VersionRequirementError
++from sphinx.errors import (
++    ApplicationError,
++    ConfigError,
++    ExtensionError,
++    VersionRequirementError,
++)
+ from sphinx.events import EventManager
+ from sphinx.highlighting import lexer_classes
+ from sphinx.locale import __
+@@ -131,7 +136,6 @@ _first_party_themes = (
      'alabaster',
  )
  builtin_extensions += _first_party_themes
@@ -77,3 +90,15 @@ index 872dd7a..52a690c 100644
  
  ENV_PICKLE_FILENAME = 'environment.pickle'
  
+@@ -285,6 +289,11 @@ class Sphinx:
+         # and first-party themes
+         for extension in builtin_extensions:
+             self.setup_extension(extension)
++        for extension in _first_party_extensions:
++            try:
++                self.setup_extension(extension)
++            except ExtensionError:
++                pass  # DEBIAN: Allow missing first-party extensions
+ 
+         # load all user-given extension modules
+         for extension in self.config.extensions:

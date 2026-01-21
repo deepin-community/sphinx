@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright © 2011 Jakub Wilk <jwilk@debian.org>
-#           © 2014-2024 Dmitry Shachnev <mitya57@debian.org>
+#           © 2014-2025 Dmitry Shachnev <mitya57@debian.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -160,13 +160,6 @@ sub load_packaged_js()
         wanted => sub {
             my $js = $_;
             my ($jsbase, $jsname) = m{([0-9.]+/(\S+[.]js))$} or return;
-            if ($jsbase =~ m{1\.0/(jquery|underscore)\.js})
-            {
-                # These files are still shipped in libjs-sphinxdoc in order not to break
-                # symlinks in previously built -doc packages. They will be dropped in some
-                # future libjs-sphinxdoc version. After that, this check can be removed.
-                return;
-            }
             my $version = $versions{$jsbase};
             defined($version) or error("$jsbase is not in the index; is it up-to-date?");
             delete $versions{$jsbase};
@@ -204,7 +197,9 @@ sub load_packaged_js()
     );
     while (my ($jsname, $dependency) = each %legacy_dependencies)
     {
-        $packaged_js{md5($jsname)} = [$jsname, $dependency];
+        if (-e $jsname) {
+            $packaged_js{md5($jsname)} = [$jsname, $dependency];
+        }
         $packaged_js{basename($jsname)} = [$jsname, $dependency];
     }
 }
@@ -293,7 +288,7 @@ sub sanity_check($$)
     my $loads_searchindex = $search =~ m{<script(?: type="text/javascript")? src="[^"]*searchindex.js\s?"(?: defer(?:="defer")?)?>};
     unless ($loads_searchindex)
     {
-        # old style, used before Sphinx 2.0
+        # old style, used before Sphinx 2.0 (but still used by sphinx-rtd-theme)
         $loads_searchindex = $search =~ m/\QjQuery(function() { Search.loadIndex("\E/;
     }
     my ($has_source) = $documentation_options =~ m{HAS_SOURCE:\s*(true|false)};
@@ -362,7 +357,7 @@ sub unknown_javascript($)
     my ($js) = @_;
     my $message = "unknown JavaScript code: $js";
     $js =~ s{.*/}{};
-    my $basic = grep { $_ eq $js } qw(searchtools.js doctools.js jquery.js underscore.js);
+    my $basic = grep { $_ eq $js } qw(searchtools.js doctools.js);
     my $cruft = grep { $_ eq $js } @cruft_js;
     my @ignored_files = (
         "documentation_options.js",

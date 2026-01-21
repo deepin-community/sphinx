@@ -1,3 +1,104 @@
+sphinx (8.2.3-12) unstable; urgency=medium
+
+  * Team upload.
+  * Use new package name for roman-numerals (closes: #1123782).
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 23 Dec 2025 11:28:26 +0000
+
+sphinx (8.2.3-11) unstable; urgency=medium
+
+  * Depend on libgvplugin-neato-layout and libgvplugin-pango for the tests
+    (closes: #1122119, thanks László Böszörményi).
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Sun, 07 Dec 2025 20:20:57 +0300
+
+sphinx (8.2.3-10) unstable; urgency=medium
+
+  * Backport upstream commits to fix tests with Python 3.14 (LP: #2133023).
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Wed, 26 Nov 2025 20:54:23 +0300
+
+sphinx (8.2.3-9) unstable; urgency=medium
+
+  * Backport upstream patch to fix PDF build of French documents with
+    footnotes (closes: #1114478).
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Sat, 15 Nov 2025 15:07:35 +0300
+
+sphinx (8.2.3-8) unstable; urgency=medium
+
+  * Add a patch to bump docutils upper limit to 0.23 (closes: #1118469).
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Mon, 20 Oct 2025 23:14:17 +0300
+
+sphinx (8.2.3-7) unstable; urgency=medium
+
+  * Add a patch to make the tests pass with Docutils ≥ 0.22.1.
+  * Drop ‘Rules-Requires-Root: no’, it became default in dpkg 1.22.13.
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Wed, 01 Oct 2025 21:15:17 +0300
+
+sphinx (8.2.3-6) unstable; urgency=medium
+
+  * Remove the old compatibility symlinks again.
+  * Make dh_sphinxdoc ignore legacy dependencies if they do not exist.
+  * Remove no longer needed Lintian overrides.
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Sat, 06 Sep 2025 16:56:11 +0300
+
+sphinx (8.2.3-5) unstable; urgency=medium
+
+  * Team upload.
+  * Temporarily revert the removal of jQuery from 8.2.3
+
+ -- Alexandre Detiste <tchet@debian.org>  Sat, 06 Sep 2025 09:59:59 +0200
+
+sphinx (8.2.3-4) unstable; urgency=medium
+
+  * Remove jquery.js and underscore.js compatibility symlinks completely
+    (closes: #1114037).
+  * Amend remove_contrib_references.diff: try to load first-party extensions,
+    but ignore errors (closes: #1112319, thanks Erin of Yukis).
+  * Drop obsolete Breaks, Replaces and Conflicts.
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Fri, 05 Sep 2025 22:20:42 +0300
+
+sphinx (8.2.3-3) unstable; urgency=medium
+
+  * Team Upload
+  * Usage of jQuery was dropped since sphinx 6.0
+    * Remove libjs-jquery & libjs-underscore from Build-Depends:
+    * libjs-sphinxdoc: lessen the priority of these libraries referenced
+                       by compatibility symlinks from Depends: to Recommends:
+
+ -- Alexandre Detiste <tchet@debian.org>  Fri, 05 Sep 2025 17:02:16 +0200
+
+sphinx (8.2.3-2) unstable; urgency=medium
+
+  * Backport upstream patch to make the tests pass with Docutils 0.22.
+  * Break python3-sphinx-autodoc-typehints < 3.1.0.
+  * Upload to unstable.
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Wed, 27 Aug 2025 12:05:30 +0300
+
+sphinx (8.2.3-1) experimental; urgency=medium
+
+  * New upstream release.
+  * Drop patches:
+    - fix_test_format_date_timezone.diff (included in the new release)
+    - source_date_epoch.diff (included in the new release)
+    - broken_argparse.diff (was needed only for Python 3.13.0)
+  * Refresh other patches.
+  * Bump required flit version to 3.11 (per pyproject.toml).
+  * Build-depend on python3-roman-numerals.
+  * Bump required version for searchtools.js in debian/dh-sphinxdoc/index.
+  * Update debian/copyright.
+  * Adapt package_dir replacement code in debian/rules to the new version.
+  * Update numbers in debian/jstest/run-tests.
+  * Bump Standards-Version to 4.7.2, no changes needed.
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Wed, 09 Apr 2025 22:54:46 +0300
+
 sphinx (8.1.3-5) unstable; urgency=medium
 
   * Switch from MathJax 2 to MathJax 3.

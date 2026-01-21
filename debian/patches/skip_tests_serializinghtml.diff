@@ -7,22 +7,22 @@ Subject: Skip tests that require sphinxcontrib.serializinghtml module
  1 file changed, 2 insertions(+)
 
 diff --git a/tests/test_writers/test_api_translator.py b/tests/test_writers/test_api_translator.py
-index bdbea0d..d10e2d6 100644
+index 1220192..6d8246b 100644
 --- a/tests/test_writers/test_api_translator.py
 +++ b/tests/test_writers/test_api_translator.py
-@@ -36,6 +36,7 @@ def test_singlehtml_set_translator_for_singlehtml(app):
+@@ -47,6 +47,7 @@ def test_singlehtml_set_translator_for_singlehtml(app: SphinxTestApp) -> None:
      assert translator_class.__name__ == 'ConfSingleHTMLTranslator'
  
  
 +@pytest.mark.skip('Requires sphinxcontrib.serializinghtml module')
  @pytest.mark.sphinx('pickle', testroot='api-set-translator')
- def test_pickle_set_translator_for_pickle(app):
+ def test_pickle_set_translator_for_pickle(app: SphinxTestApp) -> None:
      translator_class = app.builder.get_translator_class()
-@@ -43,6 +44,7 @@ def test_pickle_set_translator_for_pickle(app):
+@@ -54,6 +55,7 @@ def test_pickle_set_translator_for_pickle(app: SphinxTestApp) -> None:
      assert translator_class.__name__ == 'ConfPickleTranslator'
  
  
 +@pytest.mark.skip('Requires sphinxcontrib.serializinghtml module')
  @pytest.mark.sphinx('json', testroot='api-set-translator')
- def test_json_set_translator_for_json(app):
+ def test_json_set_translator_for_json(app: SphinxTestApp) -> None:
      translator_class = app.builder.get_translator_class()

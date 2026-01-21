@@ -7,10 +7,10 @@ Subject: Skip tests that require sphinxcontrib.jsmath module
  1 file changed, 3 insertions(+)
 
 diff --git a/tests/test_builders/test_build_html_maths.py b/tests/test_builders/test_build_html_maths.py
-index 0f77691..4ce2953 100644
+index cc21142..99408ff 100644
 --- a/tests/test_builders/test_build_html_maths.py
 +++ b/tests/test_builders/test_build_html_maths.py
-@@ -26,6 +26,7 @@ def test_html_math_renderer_is_imgmath(app):
+@@ -37,6 +37,7 @@ def test_html_math_renderer_is_imgmath(app: SphinxTestApp) -> None:
      assert app.builder.math_renderer_name == 'imgmath'
  
  
@@ -18,7 +18,7 @@ index 0f77691..4ce2953 100644
  @pytest.mark.sphinx(
      'html',
      testroot='basic',
-@@ -50,6 +51,7 @@ def test_html_math_renderer_is_duplicated2(app):
+@@ -62,6 +63,7 @@ def test_html_math_renderer_is_duplicated2(app: SphinxTestApp) -> None:
      assert app.builder.math_renderer_name == 'imgmath'  # The another one is chosen
  
  
@@ -26,7 +26,7 @@ index 0f77691..4ce2953 100644
  @pytest.mark.sphinx(
      'html',
      testroot='basic',
-@@ -62,6 +64,7 @@ def test_html_math_renderer_is_chosen(app):
+@@ -75,6 +77,7 @@ def test_html_math_renderer_is_chosen(app: SphinxTestApp) -> None:
      assert app.builder.math_renderer_name == 'imgmath'
  
  
